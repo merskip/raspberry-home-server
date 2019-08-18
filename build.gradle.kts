@@ -34,6 +34,8 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.webjars:jquery:3.4.1")
+    implementation("org.webjars:bootstrap:4.3.1")
 }
 
 tasks.withType<KotlinCompile> {
