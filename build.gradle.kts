@@ -7,6 +7,7 @@ plugins {
     war
     kotlin("jvm") version "1.2.71"
     kotlin("plugin.spring") version "1.2.71"
+    id("idea")
 }
 
 group = "pl.merskip"
@@ -40,4 +41,30 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "12"
     }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir("src/main/kotlin")
+        }
+        resources {
+            srcDir("src/main/webapp")
+        }
+    }
+}
+
+task<Exec>("npmInstall") {
+    workingDir("src/main/webapp")
+    commandLine("npm", "install")
+}
+
+task<Exec>("webpack") {
+    dependsOn("npmInstall")
+    workingDir("src/main/webapp")
+    commandLine("npm", "run", "webpack")
+}
+
+tasks.named("idea") {
+    dependsOn("cleanIdeaModule", "ideaModule", "npmInstall")
 }
