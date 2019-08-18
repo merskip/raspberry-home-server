@@ -11,7 +11,7 @@ plugins {
 
 group = "pl.merskip"
 version = "0.0.1"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_12
 
 val developmentOnly: Configuration by configurations.creating
 configurations {
@@ -38,6 +38,6 @@ dependencies {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "12"
     }
 }
