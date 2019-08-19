@@ -50,6 +50,8 @@ export default class Sensor extends Component {
             return {
                 label: characteristic['name'],
                 fill: false,
+                pointRadius: 0,
+                borderWidth: 2,
                 borderColor: Sensor._getDataSetColor(characteristic),
                 data: measurements.map(m => {
                     return {
