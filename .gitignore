@@ -72,3 +72,6 @@ fabric.properties
 
 src/main/webapp/node_modules/
 src/main/webapp/static/built/
+
+/.gradle/
+/build/

@@ -11,6 +11,5 @@ class WebConfig : WebMvcConfigurer {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/")
-                .addResourceLocations("/")
     }
 }

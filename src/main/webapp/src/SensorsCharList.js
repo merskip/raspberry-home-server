@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Line} from "react-chartjs-2";
 
-export default class Sensor extends Component {
+export default class SensorsCharList extends Component {
 
     constructor(props) {
         super(props);
@@ -26,7 +26,7 @@ export default class Sensor extends Component {
         fetch(`api/sensors/${sensor.id}/measurements/${date}`)
             .then(res => res.json())
             .then(measurements => {
-                let measurementsByCharacteristic = Sensor.groupMeasurementsByCharacteristic(measurements);
+                let measurementsByCharacteristic = SensorsCharList.groupMeasurementsByCharacteristic(measurements);
                 this.setState({
                     chart_data: {
                         datasets: this._getDataSets(measurementsByCharacteristic)
@@ -52,7 +52,7 @@ export default class Sensor extends Component {
                 fill: false,
                 pointRadius: 0,
                 borderWidth: 2,
-                borderColor: Sensor._getDataSetColor(characteristic),
+                borderColor: SensorsCharList._getDataSetColor(characteristic),
                 data: measurements.map(m => {
                     return {
                         t: new Date(m['timeStart']),
