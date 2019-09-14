@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import {BrowserRouter as Router, Link, NavLink, Route} from "react-router-dom";
-import HomePage from "./HomePage";
-import ChartPage from "./ChartPage";
-import NoFoundPage from "./NoFoundPage";
-import Switch from "react-router-dom/es/Switch";
+import {BrowserRouter as Router, NavLink, Route, Switch} from "react-router-dom";
+
+import NoFoundPage from "./NoFoundPage";;
+import HomePage from "./page/HomePage";
+import ChartPage from "./page/ChartPage";
 
 
 export default class Navigation extends Component {
@@ -22,8 +22,8 @@ export default class Navigation extends Component {
 
 function NavigationMenu() {
     return <div className="container">
-        <h1>Raspberry Home</h1>
-        <ul className="nav nav-pills">
+        <h1 className="mt-3 mb-4">Raspberry Home</h1>
+        <ul className="nav nav-pills mb-4">
             <li className="nav-item">
                 <NavLink exact={true} to="/" className="nav-link" activeClassName="active">Home</NavLink>
             </li>
