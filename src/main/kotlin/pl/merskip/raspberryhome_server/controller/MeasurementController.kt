@@ -25,6 +25,11 @@ class MeasurementController(
         return measurementRepository.findMeasurementsForSensorInDate(sensorId, afterTimeMicroseconds, beforeTimeMicroseconds)
     }
 
+    @GetMapping("/api/sensors/{sensorsIds}/lastMeasurements")
+    fun getLastMeasurements(
+            @PathVariable("sensorsIds") sensorsIds: List<Long>
+    ) = measurementRepository.findLastMeasurementsForSensors(sensorsIds)
+
     @GetMapping("/api/measurements")
     fun getLast100Measurement() = measurementRepository.findAll().reversed().take(100)
 
