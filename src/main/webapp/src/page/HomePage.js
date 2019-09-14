@@ -57,11 +57,39 @@ function SensorsGrid(props) {
     </div>
 }
 
-function CharacteristicValue(props) {
-    return <div className="mt-2">{props['characteristic']['name']}<br/>
-            {!props['lastMeasurement']
-                ? <ActivityIndicatorView spinner-grow/>
-                : <strong>{props['lastMeasurement']['formattedValue']} {props['characteristic']['unit']}</strong>
+class CharacteristicValue extends Component {
+
+    render() {
+        return <div className="mt-2">
+            {this._getIcon() || <>{this.props['characteristic']['name']}<br/></>}
+            {!this.props['lastMeasurement']
+                ? <ActivityIndicatorView small/>
+                : <strong>{this.props['lastMeasurement']['formattedValue']} {this.props['characteristic']['unit']}</strong>
             }
         </div>
+    }
+
+    _getIcon() {
+        let iconId = this._getIconId();
+        return iconId
+            ? <img src={`static/icons/${iconId}`} alt="Temperature" style={{width: "42px"}}/>
+            : null;
+    }
+
+    _getIconId() {
+        switch (this.props['characteristic']['name']) {
+            case "temperature":
+                return "icons8-thermometer-48.png";
+            case "pressure":
+                return "icons8-pressure-gauge-48.png";
+            case "humidity":
+                return "icons8-dew-point-48.png";
+            case "light":
+                return "icons8-sun-48.png";
+            case "boolean":
+                return "icons8-circle-48.png";
+            default:
+                return null;
+        }
+    }
 }
