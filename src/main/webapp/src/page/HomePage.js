@@ -101,10 +101,12 @@ class Characteristic extends Component {
 
     _getFormattedValue() {
         let formattedValue = this.props['measurement']['formattedValue'];
-        if (this.props['characteristic']['type'] === "boolean") {
+        if (this.props['characteristic']['type'] === "bool") {
             formattedValue = this.props['measurement']['value'] ? "True" : "False";
         }
-
-        return `${formattedValue} ${this.props['characteristic']['unit']}`
+        if (this.props['characteristic']['unit']) {
+            formattedValue += " " + this.props['characteristic']['unit'];
+        }
+        return formattedValue;
     }
 }
