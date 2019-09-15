@@ -15,7 +15,6 @@ export default class HomePage extends Component {
         fetch(`api/sensors`)
             .then(res => res.json())
             .then(sensors => {
-                console.log(sensors);
                 this.setState({
                     sensors: sensors
                 });
@@ -44,52 +43,68 @@ function SensorsGrid(props) {
             <div key={index} className="card">
                 <div className="card-body">
                     <h5 className="card-title">{sensor['name']}</h5>
-                    {sensor['characteristics'].map((characteristic, index) => {
-                        let lastMeasurement = (props['lastMeasurements'] || []).find(m => m['characteristicId'] === characteristic['id']);
-                        return (
-                            <CharacteristicValue key={index} sensor={sensor} characteristic={characteristic}
-                                                 lastMeasurement={lastMeasurement}/>
-                        )
-                    })}
+                    <CharacteristicsList characteristics={sensor['characteristics']} lastMeasurements={props['lastMeasurements']}/>
                 </div>
             </div>
         ))}
     </div>
 }
 
-class CharacteristicValue extends Component {
+function CharacteristicsList(props) {
+    let characteristics = props['characteristics'];
+    let lastMeasurements = props['lastMeasurements'];
+
+    return <div className="row">{
+        characteristics.map((characteristic, index) => {
+            let matchedMeasurement = (lastMeasurements || []).find(m => m['characteristicId'] === characteristic['id']);
+            return <div key={index} className="col">
+                <Characteristic characteristic={characteristic} measurement={matchedMeasurement}/>
+            </div>
+        })
+    }</div>
+}
+
+class Characteristic extends Component {
+
 
     render() {
-        return <div className="mt-2">
-            {this._getIcon() || <>{this.props['characteristic']['name']}<br/></>}
-            {!this.props['lastMeasurement']
+        return <div className="text-center">
+            {this._renderIconOrTitle()}
+            <div className="mt-1">{!this.props['measurement']
                 ? <ActivityIndicatorView small/>
-                : <strong>{this.props['lastMeasurement']['formattedValue']} {this.props['characteristic']['unit']}</strong>
+                : <span style={{fontWeight: 500}}>{this._getFormattedValue()}</span>
             }
+            </div>
+        </div>
+    }
+
+    _renderIconOrTitle() {
+        return <div>
+            {this._getIcon() || this.props['characteristic']['name']}
         </div>
     }
 
     _getIcon() {
-        let iconId = this._getIconId();
-        return iconId
-            ? <img src={`static/icons/${iconId}`} alt="Temperature" style={{width: "42px"}}/>
+        let characteristicNameToIconSrc = {
+            "temperature": "static/icons/ic-thermometer.png",
+            "pressure": "static/icons/ic-pressure-gauge.png",
+            "humidity": "static/icons/ic-dew-point.png",
+            "light": "static/icons/ic-sun.png",
+            "boolean": "static/icons/ic-circle.png"
+        };
+        let iconSrc = characteristicNameToIconSrc[this.props['characteristic']['name']];
+        return iconSrc
+            ? <img src={iconSrc} alt={this.props['characteristic']['name']} title={this.props['characteristic']['name']}
+                   style={{width: "42px"}}/>
             : null;
     }
 
-    _getIconId() {
-        switch (this.props['characteristic']['name']) {
-            case "temperature":
-                return "icons8-thermometer-48.png";
-            case "pressure":
-                return "icons8-pressure-gauge-48.png";
-            case "humidity":
-                return "icons8-dew-point-48.png";
-            case "light":
-                return "icons8-sun-48.png";
-            case "boolean":
-                return "icons8-circle-48.png";
-            default:
-                return null;
+    _getFormattedValue() {
+        let formattedValue = this.props['measurement']['formattedValue'];
+        if (this.props['characteristic']['type'] === "boolean") {
+            formattedValue = this.props['measurement']['value'] ? "True" : "False";
         }
+
+        return `${formattedValue} ${this.props['characteristic']['unit']}`
     }
 }
