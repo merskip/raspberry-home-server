@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import ActivityIndicatorView from "../view/ActivityIndicatorView";
+import dateFormat from "dateformat";
+import timeago from "time-ago";
 
 export default class HomePage extends Component {
 
@@ -31,9 +33,32 @@ export default class HomePage extends Component {
 
     render() {
         return <div className="container">
-            {!this.state.sensors ? <ActivityIndicatorView/>
+            {!this.state.sensors
+                ? <ActivityIndicatorView/>
                 : <SensorsGrid sensors={this.state.sensors} lastMeasurements={this.state.lastMeasurements}/>}
+            {this.state.lastMeasurements && this._renderMeasurementsTimeRange()}
         </div>
+    }
+
+    _renderMeasurementsTimeRange() {
+        let timeStartMin = this._getTimeStartMin();
+        let timeEndMax = this._getTimeEndMax();
+        let timeDifferentMillis = timeEndMax - timeStartMin;
+        let timeStartIsToday = new Date().getDay() === timeStartMin.getDay();
+        let formattedTimeStart = dateFormat(timeStartMin, timeStartIsToday ? "HH:MM:ss" : "mm.dd.yyyy HH:MM:ss");
+        return <small className="text-muted">Measured at {formattedTimeStart} ({timeago.ago(timeStartMin)}) and it took {timeDifferentMillis / 1000}s</small>;
+    }
+
+    _getTimeStartMin() {
+        let firstTimeStart = this.state.lastMeasurements[0]['timeStart'];
+        let time = this.state.lastMeasurements.reduce((min, m) => m['timeStart'] < min ? m['timeStart'] : min, firstTimeStart);
+        return new Date(time);
+    }
+
+    _getTimeEndMax() {
+        let firstTimeEnd = this.state.lastMeasurements[0]['timeEnd'];
+        let time = this.state.lastMeasurements.reduce((max, m) => m['timeEnd'] > max ? m['timeEnd'] : max, firstTimeEnd);
+        return new Date(time);
     }
 }
 
@@ -71,7 +96,7 @@ class Characteristic extends Component {
     render() {
         return <div className="text-center">
             {this._renderIconOrTitle()}
-            {this._renderValue()}
+            {this._renderMeasurementValue()}
         </div>
     }
 
@@ -81,12 +106,12 @@ class Characteristic extends Component {
         </div>
     }
 
-    _renderValue() {
-        return <div className="mt-1">{
-            !this.props['measurement']
+    _renderMeasurementValue() {
+        return <div className="mt-1">
+            {!this.props['measurement']
                 ? <ActivityIndicatorView small/>
-                : <span style={{fontWeight: 500}}>{this._getFormattedValue()}</span>
-        }</div>
+                : <span style={{fontWeight: 500}}>{this._getFormattedValue()}</span>}
+        </div>
     }
 
     _getIcon() {
