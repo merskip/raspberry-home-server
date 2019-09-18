@@ -1,11 +1,9 @@
 package pl.merskip.raspberryhome_server.jpa
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonInclude
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 import javax.persistence.*
 
 @Entity

@@ -1,7 +1,6 @@
 package pl.merskip.raspberryhome_server.jpa
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonInclude
 import javax.persistence.*
 
 @Entity
