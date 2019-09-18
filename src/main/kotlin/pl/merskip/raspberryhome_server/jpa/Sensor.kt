@@ -1,5 +1,7 @@
 package pl.merskip.raspberryhome_server.jpa
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import javax.persistence.*
 
 @Entity
@@ -21,5 +23,11 @@ data class Sensor(
         )
         val characteristics: List<Characteristic>,
 
-        val flags: String
-)
+        @Column(name = "flags")
+        @JsonIgnore
+        val _flags: String?
+) {
+
+        val flags: List<String>
+                get() = _flags?.split(",").orEmpty()
+}
