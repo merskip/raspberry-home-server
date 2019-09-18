@@ -1,9 +1,7 @@
 package pl.merskip.raspberryhome_server.jpa
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import com.fasterxml.jackson.annotation.JsonIgnore
+import javax.persistence.*
 
 @Entity
 @Table(name = "characteristics")
@@ -24,5 +22,10 @@ data class Characteristic(
         @Column(name = "max_value")
         val maxValue: Float?,
 
-        val accuracy: Float?
+        val accuracy: Float?,
+
+        @JoinColumn(name = "last_measurement_id")
+        @ManyToOne
+        @JsonIgnore
+        val lastMeasurement: Measurement
 )

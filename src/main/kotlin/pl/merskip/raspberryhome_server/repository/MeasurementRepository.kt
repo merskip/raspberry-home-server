@@ -13,22 +13,18 @@ interface MeasurementRepository : CrudRepository<Measurement, Long> {
     @Query("""
         select DATE(FROM_UNIXTIME(m.time_start / 1e6)) as d
         from measurements m
-        group by d""",
-            nativeQuery = true)
+        group by d
+        """, nativeQuery = true)
     fun findAllDays(): List<Date>
 
     @Query("""
         select m.*
-        from characteristics c
-            left join measurements m on c.id = m.characteristic_id
-                and time_end = (
-                    select MAX(m.time_end)
-                    from measurements m
-                    where m.characteristic_id = c.id
-                )
-        where m.sensor_id IN :sensorsIds
-        order by m.sensor_id""",
-            nativeQuery = true)
+        from sensors s
+        left join sensors_to_characteristics s2c on s.id = s2c.sensor_id
+        right join characteristics c on s2c.characteristic_id = c.id
+        left join measurements m on c.last_measurement_id = m.id
+        where s.id in :sensorsIds
+        """, nativeQuery = true)
     fun findLastMeasurementsForSensors(sensorsIds: List<Long>): Iterable<Measurement>
 
     @Query("""

@@ -8,10 +8,8 @@ import pl.merskip.raspberryhome_server.repository.SensorRepository
 @RestController
 class SensorController(
         val sensorRepository: SensorRepository
-){
+) {
 
     @GetMapping("/api/sensors")
     fun getSensors() = sensorRepository.findAll().toList()
-
-
 }

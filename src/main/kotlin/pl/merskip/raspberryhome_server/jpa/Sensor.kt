@@ -19,5 +19,7 @@ data class Sensor(
                 joinColumns = [JoinColumn(name = "sensor_id")],
                 inverseJoinColumns = [JoinColumn(name = "characteristic_id")]
         )
-        val characteristics: List<Characteristic>
+        val characteristics: List<Characteristic>,
+
+        val flags: String
 )
